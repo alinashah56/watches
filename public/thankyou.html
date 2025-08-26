@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+   <title>Ecommerce</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<body>
+  <!-- Header/Navbar -->
+  <header class="bg-light p-3">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand fw-bold" href="home.html">Watches Store</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link" href="home.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+            <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Thank You / Invoice Section -->
+  <main class="container text-center my-5">
+    <div class="card shadow p-4" id="invoice-section">
+      <h1 class="text-success mb-3">🎉 Thank You!</h1>
+      <p class="lead">Your order has been placed successfully.</p>
+      <p>We’ll send you an email with the order details and tracking information soon.</p>
+
+      <!-- Order Summary -->
+      <div class="mt-4 text-start">
+        <h4>🧾 Order Summary</h4>
+        <ul id="order-items" class="list-group mb-3"></ul>
+        <p class="fw-bold">Total: $<span id="order-total">0</span></p>
+        <p><strong>Payment Method:</strong> <span id="order-payment">N/A</span></p>
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex justify-content-center gap-3 mt-3">
+        <a href="shop.html" class="btn btn-primary">Continue Shopping</a>
+        <button class="btn btn-outline-secondary" onclick="printInvoice()">🖨️ Print Invoice</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-light text-center p-3 mt-4">
+    <p>&copy; 2025 Watches Store</p>
+  </footer>
+
+  <!-- Script to Load Order Details -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let orderData = JSON.parse(localStorage.getItem("lastOrder")) || {};
+      let orderItemsContainer = document.getElementById("order-items");
+      let orderTotal = document.getElementById("order-total");
+      let orderPayment = document.getElementById("order-payment");
+
+      if (orderData.items && orderData.items.length > 0) {
+        let total = 0;
+        orderData.items.forEach(item => {
+          total += item.price;
+          let li = document.createElement("li");
+          li.className = "list-group-item d-flex justify-content-between align-items-center";
+          li.innerHTML = `${item.name} - $${item.price}`;
+          orderItemsContainer.appendChild(li);
+        });
+        orderTotal.textContent = total;
+        orderPayment.textContent = orderData.payment;
+      } else {
+        orderItemsContainer.innerHTML = "<li class='list-group-item'>No items found.</li>";
+      }
+
+      // Clear order after showing
+      localStorage.removeItem("lastOrder");
+    });
+
+    function printInvoice() {
+      window.print();
+    }
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
